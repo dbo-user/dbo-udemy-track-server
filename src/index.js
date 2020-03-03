@@ -1,3 +1,4 @@
+require('./models/User'); // import User model
 const express = require('express'); // import express library
 const mongoose = require('mongoose'); // import mongoose library
 const bodyParser = require('body-parser'); // helper to parse incoming request body 
@@ -17,7 +18,9 @@ mongoose.connect(mongoUri, {
 
 // text mongoose connection
 mongoose.connection.on('connected', () => {
+    console.log();
     console.log('GOOD NEWS Connected to mongo instance from index.js');
+    console.log();
 });
 // mongoose connection failed
 mongoose.connection.on('error', (err) => {
@@ -31,6 +34,8 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000, () => {
+    console.log();
     console.log('This App is listening on localhost port 3000 from index.js');
+    console.log();
 });
 
