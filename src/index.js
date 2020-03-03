@@ -3,6 +3,7 @@ const express = require('express'); // import express library
 const mongoose = require('mongoose'); // import mongoose library
 const bodyParser = require('body-parser'); // helper to parse incoming request body 
 const authRoutes = require('./routes/authRoutes'); // import
+const requireAuth = require('./middlewares/requireAuth'); // import checks jsonwebtoken
 
 const app = express(); // create app object
 
@@ -29,8 +30,9 @@ mongoose.connection.on('error', (err) => {
 
 // GET http request route handler with incoming request object and outgoing response object
 // runs automatically when you go to localhost:3000
-app.get('/', (req, res) => {
-    res.send('Root level GET response from index.js');
+// requireAuth is in middlewares folder, it checks for valid jsonwebtoken
+app.get('/', requireAuth, (req, res) => {
+    res.send(`Successful Root level GET response from index.js: EMAIL is ${req.user.email}`);
 });
 
 app.listen(3000, () => {
