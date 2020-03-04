@@ -1,9 +1,11 @@
+// route managment for signing up and signing in
+
 const express = require('express'); // import express library
 const mongoose = require('mongoose'); // import mongoose
 const jwt = require('jsonwebtoken'); // import
 
 const User = mongoose.model('User'); // access to User model and access to User collection in mongodb
-// can use User to manipulate the User collection
+// we can use User to manipulate the User collection
 
 // use express to create a router object
 // a router is an object that allows us to associate a number of route handlers with it
@@ -11,7 +13,7 @@ const router = express.Router();
 
 // POST signup http request route handler with incoming request object and outgoing response object
 router.post('/signup', async (req, res) => {
-    // req.body has email and password because we put it in Postman
+    // req.body has email and password because we put it in User.js and Postman
     const { email, password} = req.body;
     
     try {
@@ -30,8 +32,7 @@ router.post('/signup', async (req, res) => {
         return res.status(422).send(err.message) // code for invalid data, email or passowrd
         // return will exit here
     }
-});
-
+}); // end router.post signup
 
 // POST signin http request route handler with incoming request object and outgoing response object
 // this is signin not signup so the user should already be on file in mongodb
@@ -42,11 +43,15 @@ router.post('/signin', async (req, res) => {
 
     // if the email is missing then send error message and exit
     if (!email) {
-        return res.status(422).send({ error: 'Must provide email and password from authRoutes.js signin request'});
+        return res
+            .status(422)
+            .send({ error: 'Must provide email from authRoutes.js signin post request'});
     } // end if
     // if the password is missing then send error message and exit
     if (!password) {
-        return res.status(422).send({ error: 'Must provide email and password from authRoutes.js signin request'});
+        return res
+            .status(422)
+            .send({ error: 'Must provide password from authRoutes.js signin post request'});
     } // end if
 
     // email and password are present 
@@ -54,7 +59,7 @@ router.post('/signin', async (req, res) => {
     const user = await User.findOne({ email });
     // if email not found in mongodb then send error message and exit
     if (!user) {
-        return res.status(422).send({ error: 'Email not found, check email from authRoutes.js signin request'});
+        return res.status(422).send({ error: 'Email not found, check email from authRoutes.js signin post request'});
     } // end if
 
     // email is okay so compare passwords
@@ -67,9 +72,9 @@ router.post('/signin', async (req, res) => {
         console.log('Successful sign in from authRoutes.js');
 
     } catch (err) { // passwords don't match so send error message and exit
-        return res.status(422).send({ error: 'Invalid password from authRoutes.js signin request'});
+        return res.status(422).send({ error: 'Invalid password from authRoutes.js signin post request'});
     } // end catch
 
-}); // end post signin
+}); // end router post signin
 
 module.exports = router;

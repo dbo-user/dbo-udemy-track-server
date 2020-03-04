@@ -1,14 +1,17 @@
 require('./models/User'); // import User model
+require('./models/Track'); // import Track model
 const express = require('express'); // import express library
 const mongoose = require('mongoose'); // import mongoose library
 const bodyParser = require('body-parser'); // helper to parse incoming request body 
 const authRoutes = require('./routes/authRoutes'); // import
+const trackRoutes = require('./routes/trackRoutes'); // import
 const requireAuth = require('./middlewares/requireAuth'); // import checks jsonwebtoken
 
 const app = express(); // create app object
 
 app.use(bodyParser.json()); // use bodyParser to parse incoming json formatted data
 app.use(authRoutes);
+app.use(trackRoutes); // associate with the app object
 
 // next few lines to connect to mongo using mongoose
 const mongoUri = 'mongodb+srv://admin:passwordpassword@cluster0-l8rfw.mongodb.net/test?retryWrites=true&w=majority'
